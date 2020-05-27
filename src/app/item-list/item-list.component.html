@@ -1,0 +1,13 @@
+<ng-container *ngIf="shopInventoryList$ | async as shopInventory">
+  <h1>Items for Sale</h1>
+  <mat-nav-list>
+    <div *ngFor="let item of shopInventory">
+      <mat-list-item>
+        <a mat-list-item routerLink="{{ item.id }}"
+          ><h2>{{ item.displayName }}</h2></a
+        >
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-nav-list>
+</ng-container>

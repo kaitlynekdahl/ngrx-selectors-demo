@@ -1,0 +1,51 @@
+<ng-container *ngIf="currentItem$ | async as item; else itemNotFound">
+  <h2>
+    {{ item.displayName }}
+  </h2>
+  <p>{{ item.description }}</p>
+
+  <mat-divider></mat-divider>
+  <div class="purchase-form">
+    <form
+      [formGroup]="shopForm"
+      *ngIf="inStock$ | async as inStock; else outOfStock"
+      (submit)="submitCheckout()"
+    >
+      <mat-form-field>
+        <mat-label>Quantity</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          [max]="inStock"
+          [formControlName]="item.id"
+        />
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="
+          shopForm.invalid || shopForm.controls[item.id].value > inStock
+        "
+      >
+        Purchase
+      </button>
+
+      <div *ngIf="shopForm.controls[item.id].errors" class="error-message">
+        Please enter valid amount to purchase.
+      </div>
+
+      <p>In stock: {{ inStock }}</p>
+    </form>
+
+    <ng-template #outOfStock>
+      This item is out of stock!
+    </ng-template>
+  </div>
+</ng-container>
+
+<ng-template #itemNotFound>
+  This item doesn't exist!
+</ng-template>
